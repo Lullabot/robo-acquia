@@ -20,7 +20,7 @@ class RoboFile extends \Robo\Tasks
     {
         $this->acquiaKey = \Robo\Robo::Config()->get('acquia.key');
         $this->acquiaSecret = \Robo\Robo::Config()->get('acquia.secret');
-        $this->acquiaApplicationUuid = '[your-acquia-environment-uuid]';
+        $this->acquiaApplicationUuid = '[your-acquia-application-uuid]';
     }
 
     /**
