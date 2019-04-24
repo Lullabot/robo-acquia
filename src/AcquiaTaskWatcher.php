@@ -3,6 +3,7 @@
 namespace Lullabot\RoboAcquia;
 
 use AcquiaCloudApi\CloudApi\ClientInterface;
+use Robo\ResultData;
 
 /**
  * A class to watch for Acquia task(s) to complete.
@@ -25,30 +26,9 @@ class AcquiaTaskWatcher
     /**
      * The Acquia Cloud API Client.
      *
-     * @var callable
-     */
-    protected $callback;
-
-    /**
-     * The Acquia Cloud API Client.
-     *
      * @var \AcquiaCloudApi\CloudApi\ClientInterface
      */
     protected $client;
-
-    /**
-     * The name of the task. Use the constants on this class.
-     *
-     * @var string
-     */
-    protected $taskName;
-
-    /**
-     * The number of seconds before timing out.
-     *
-     * @var int
-     */
-    protected $timeout;
 
     /**
      * Constructor.
@@ -57,51 +37,56 @@ class AcquiaTaskWatcher
      *   The Acquia Cloud API Client.
      * @param string $applicationUuid
      *   The Acquia application UUID to check for tasks on.
-     * @param string $taskName
-     *   The name of the task to wait for completion.
-     * @param callable $callback
-     *   An optional callback to provide feedback during the watch loop.
-     * @param int $timeout
-     *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
      */
-    public function __construct(ClientInterface $client, $applicationUuid, $taskName, callable $callback = null, $timeout = 120)
+    public function __construct(ClientInterface $client, $applicationUuid)
     {
         $this->client = $client;
         $this->applicationUuid = $applicationUuid;
-        $this->taskName = $taskName;
-        $this->callback = $callback;
-        $this->timeout = $timeout;
     }
 
     /**
      * Watch a task for completion.
+     *
+     * @param string $taskname
+     *   The name of the Acquia task. Use the constants in this class.
+     * @param int $timeout
+     *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
+     * @param callable $callback
+     *   An optional callback to provide feedback during the watch loop.
+     *
+     * @return \Robo\ResultData
+     *   If successful, the message will contain the task id of the completed
+     *   task.
+     *
+     * @throws \Exception
+     *   If timeout was exceeded or any errors were encountered.
      */
-    public function watch()
+    public function watch($taskname, $timeout = 120, callable $callback = NULL)
     {
         $start = time();
         $task_id = null;
-        // Store any current query on this client.
+        // Since we share the query on the client, we save it and restore it.
         $current_query = $this->client->getQuery();
         $this->client->clearQuery();
         $this->client->addQuery('sort', '-created');
-        $this->client->addQuery('filter', 'name=' . $this->taskName);
+        $this->client->addQuery('filter', 'name=' . $taskname);
         $this->client->addQuery('limit', 1);
         try {
             do {
                 // Whoa there fella, don't stampede the API.
                 sleep(1);
-                if (time() - $start > $this->timeout) {
+                if (time() - $start > $timeout) {
                     throw new \Exception('The timeout was exceeded waiting for the Acquia task to complete.');
                 }
                 $result = $this->client->tasks($this->applicationUuid);
                 if (!empty($result[0]->uuid)) {
                     $task_id = $result[0]->uuid;
                     if ($result[0]->status == 'failed') {
-                        throw new \Exception(sprintf('The %s task on Acquia failed.', $this->taskName));
+                        throw new \Exception(sprintf('The %s task on Acquia failed.', $taskname));
                     }
                 }
-                if ($this->callback && is_callable($this->callback)) {
-                    call_user_func($this->callback, $result);
+                if ($callback && is_callable($callback)) {
+                    call_user_func($callback, $result);
                 }
             } while (!isset($result[0]->status) || $result[0]->status !== 'completed');
         } catch (\Exception $e) {
@@ -110,7 +95,7 @@ class AcquiaTaskWatcher
             throw $e;
         }
         $this->reapplyQuery($current_query);
-        return $task_id;
+        return new ResultData(ResultData::EXITCODE_OK, $task_id);
     }
 
     /**

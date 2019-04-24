@@ -6,7 +6,7 @@
  * generator.
  */
 
-namespace Robo\Task;
+namespace Lullabot\RoboAcquia;
 
 use AcquiaCloudApi\Response\BackupsResponse;
 use AcquiaCloudApi\Response\EnvironmentResponse;
@@ -16,11 +16,12 @@ use Robo\State\StateAwareInterface;
 use Robo\State\StateAwareTrait;
 use AcquiaCloudApi\CloudApi\Connector;
 use AcquiaCloudApi\CloudApi\Client;
-use Lullabot\RoboAcquia\AcquiaTaskWatcher;
+use Robo\Task\StackBasedTask;
 
 /**
  * Wrapper for Client Component.
- * Comands are executed in stack and can be stopped on first fail with `stopOnFail` option.
+ * Comands are executed in stack and can be stopped on first fail with
+ * `stopOnFail` option.
  *
  * ``` php
  * <?php
@@ -34,64 +35,64 @@ use Lullabot\RoboAcquia\AcquiaTaskWatcher;
  * ?>
  * ```
  *
- * @method factory($connector)
- * @method applications()
- * @method application($applicationUuid)
- * @method renameApplication($applicationUuid, $name)
- * @method code($applicationUuid)
- * @method databases($applicationUuid)
- * @method environmentDatabases($environmentUuid)
- * @method databaseCopy($environmentFromUuid, $dbName, $environmentToUuid)
- * @method databaseCreate($applicationUuid, $name)
- * @method databaseDelete($applicationUuid, $name)
- * @method createDatabaseBackup($environmentUuid, $dbName)
- * @method databaseBackups($environmentUuid, $dbName)
- * @method databaseBackup($environmentUuid, $dbName, $backupId)
- * @method restoreDatabaseBackup($environmentUuid, $dbName, $backupId)
- * @method copyFiles($environmentUuidFrom, $environmentUuidTo)
- * @method switchCode($environmentUuid, $branch)
- * @method deployCode($environmentFromUuid, $environmentToUuid, $commitMessage = NULL)
- * @method domains($environmentUuid)
- * @method createDomain($environmentUuid, $hostname)
- * @method deleteDomain($environmentUuid, $domain)
- * @method purgeVarnishCache($environmentUuid, $domains)
- * @method tasks($applicationUuid)
- * @method environments($applicationUuid)
- * @method environment($environmentUuid)
- * @method renameEnvironment($environmentUuid, $label)
- * @method servers($environmentUuid)
- * @method enableLiveDev($environmentUuid)
- * @method disableLiveDev($environmentUuid)
- * @method enableProductionMode($environmentUuid)
- * @method disableProductionMode($environmentUuid)
- * @method crons($environmentUuid)
- * @method cron($environmentUuid, $cronId)
- * @method createCron($environmentUuid, $command, $frequency, $label)
- * @method deleteCron($environmentUuid, $cronId)
- * @method disableCron($environmentUuid, $cronId)
- * @method enableCron($environmentUuid, $cronId)
- * @method drushAliases()
- * @method applicationInsights($applicationUuid)
- * @method environmentInsights($environmentUuid)
- * @method organizations()
- * @method organizationApplications($organizationUuid)
- * @method organizationRoles($organizationUuid)
- * @method updateRole($roleUuid, $permissions)
- * @method createRole($organizationUuid, $name, $permissions, $description = NULL)
- * @method deleteRole($roleUuid)
- * @method organizationTeams($organizationUuid)
- * @method teams()
- * @method renameTeam($teamUuid, $name)
- * @method createTeam($organizationUuid, $name)
- * @method deleteTeam($teamUuid)
- * @method addApplicationToTeam($teamUuid, $applicationUuid)
- * @method createTeamInvite($teamUuid, $email, $roles)
- * @method createOrganizationAdminInvite($organizationUuid, $email)
- * @method teamApplications($teamUuid)
- * @method members($organizationUuid)
- * @method invitees($organizationUuid)
- * @method deleteMember($organizationUuid, $memberUuid)
- * @method permissions()
+ * @method $this factory($connector)
+ * @method $this applications()
+ * @method $this application($applicationUuid)
+ * @method $this renameApplication($applicationUuid, $name)
+ * @method $this code($applicationUuid)
+ * @method $this databases($applicationUuid)
+ * @method $this environmentDatabases($environmentUuid)
+ * @method $this databaseCopy($environmentFromUuid, $dbName, $environmentToUuid)
+ * @method $this databaseCreate($applicationUuid, $name)
+ * @method $this databaseDelete($applicationUuid, $name)
+ * @method $this createDatabaseBackup($environmentUuid, $dbName)
+ * @method $this databaseBackups($environmentUuid, $dbName)
+ * @method $this databaseBackup($environmentUuid, $dbName, $backupId)
+ * @method $this restoreDatabaseBackup($environmentUuid, $dbName, $backupId)
+ * @method $this copyFiles($environmentUuidFrom, $environmentUuidTo)
+ * @method $this switchCode($environmentUuid, $branch)
+ * @method $this deployCode($environmentFromUuid, $environmentToUuid, $commitMessage = NULL)
+ * @method $this domains($environmentUuid)
+ * @method $this createDomain($environmentUuid, $hostname)
+ * @method $this deleteDomain($environmentUuid, $domain)
+ * @method $this purgeVarnishCache($environmentUuid, $domains)
+ * @method $this tasks($applicationUuid)
+ * @method $this environments($applicationUuid)
+ * @method $this environment($environmentUuid)
+ * @method $this renameEnvironment($environmentUuid, $label)
+ * @method $this servers($environmentUuid)
+ * @method $this enableLiveDev($environmentUuid)
+ * @method $this disableLiveDev($environmentUuid)
+ * @method $this enableProductionMode($environmentUuid)
+ * @method $this disableProductionMode($environmentUuid)
+ * @method $this crons($environmentUuid)
+ * @method $this cron($environmentUuid, $cronId)
+ * @method $this createCron($environmentUuid, $command, $frequency, $label)
+ * @method $this deleteCron($environmentUuid, $cronId)
+ * @method $this disableCron($environmentUuid, $cronId)
+ * @method $this enableCron($environmentUuid, $cronId)
+ * @method $this drushAliases()
+ * @method $this applicationInsights($applicationUuid)
+ * @method $this environmentInsights($environmentUuid)
+ * @method $this organizations()
+ * @method $this organizationApplications($organizationUuid)
+ * @method $this organizationRoles($organizationUuid)
+ * @method $this updateRole($roleUuid, $permissions)
+ * @method $this createRole($organizationUuid, $name, $permissions, $description = NULL)
+ * @method $this deleteRole($roleUuid)
+ * @method $this organizationTeams($organizationUuid)
+ * @method $this teams()
+ * @method $this renameTeam($teamUuid, $name)
+ * @method $this createTeam($organizationUuid, $name)
+ * @method $this deleteTeam($teamUuid)
+ * @method $this addApplicationToTeam($teamUuid, $applicationUuid)
+ * @method $this createTeamInvite($teamUuid, $email, $roles)
+ * @method $this createOrganizationAdminInvite($organizationUuid, $email)
+ * @method $this teamApplications($teamUuid)
+ * @method $this members($organizationUuid)
+ * @method $this invitees($organizationUuid)
+ * @method $this deleteMember($organizationUuid, $memberUuid)
+ * @method $this permissions()
  */
 class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
 {
@@ -131,6 +132,8 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
 
     /**
      * Clear query.
+     *
+     * @return $this
      */
     public function clearQuery()
     {
@@ -143,6 +146,8 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
      *
      * @param string $name
      * @param string $value
+     *
+     * @return $this
      */
     public function addQuery($name, $value)
     {
@@ -157,19 +162,17 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
      *   The Acquia application UUID to check for tasks on.
      * @param string $name
      *   The name of the task to wait for completion.
-     * @param callable $callback
-     *   An optional callback to provide feedback during the watch loop.
      * @param int $timeout
      *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
+     * @param callable $callback
+     *   An optional callback to provide feedback during the watch loop.
      *
      * @return $this
      */
-    public function waitForTaskCompletion($applicationUuid, $name, callable $callback = null, $timeout = 120)
+    public function waitForTaskCompletion($applicationUuid, $name, $timeout = 120, callable $callback = null)
     {
-        if (!empty($this->taskWatcher)) {
-            throw new \Exception('An Acquia task watcher has already been instantiated for this Robo stack.');
-        }
-        $this->taskWatcher = new AcquiaTaskWatcher($this->delegate, $applicationUuid, $name, $callback, $timeout);
+        $task_watcher = new AcquiaTaskWatcher($this->delegate, $applicationUuid);
+        $this->addToCommandStack([$task_watcher, 'watch'], [$name, $timeout, $callback]);
         return $this;
     }
 
@@ -181,18 +184,6 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
     protected function _createRole($organizationUuid, $name, $permissions, $description = null)
     {
         $this->delegate->createRole($organizationUuid, $name, $permissions, $description);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function run()
-    {
-        $result = parent::run();
-        if ($this->taskWatcher) {
-            $this->taskWatcher->watch();
-        }
-        return $result;
     }
 
     /**
@@ -219,4 +210,5 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
         }
         return Result::error($this, 'Unable to detect the type of response in processResult().', $function_result);
     }
+
 }
