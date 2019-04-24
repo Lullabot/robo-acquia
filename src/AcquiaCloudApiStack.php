@@ -102,13 +102,6 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
     protected $connector;
 
     /**
-     * A task watcher to wait for tasks to complete.
-     *
-     * @var \Lullabot\RoboAcquia\AcquiaTaskWatcher
-     */
-    protected $taskWatcher;
-
-    /**
      * Constructor.
      *
      * @param iterable $config
