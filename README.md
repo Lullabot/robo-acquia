@@ -41,12 +41,17 @@ class RoboFile extends \Robo\Tasks
 {
     use Lullabot\RoboAcquia\LoadRoboAcquiaTasks;
 
+    private $acquiaKey;
+    private $acquiaSecret;
+    private $acquiaApplicationUuid;
+
     public function __construct()
     {
         $this->acquiaKey = \Robo\Robo::Config()->get('acquia.key');
         $this->acquiaSecret = \Robo\Robo::Config()->get('acquia.secret');
-        $this->acquiaApplicationUuid = '[your-acquia-application-uuid]';
+        $this->acquiaApplicationUuid = '[your-acquia-environment-uuid]';
     }
+
     /**
      * List out tasks.
      *
@@ -116,11 +121,15 @@ class RoboFile extends \Robo\Tasks
 {
     use LoadRoboAcquiaTasks;
 
+    private $acquiaKey;
+    private $acquiaSecret;
+    private $acquiaApplicationUuid;
+
     public function __construct()
     {
         $this->acquiaKey = \Robo\Robo::Config()->get('acquia.key');
         $this->acquiaSecret = \Robo\Robo::Config()->get('acquia.secret');
-        $this->acquiaApplicationUuid = '[your-application-uuid]';
+        $this->acquiaApplicationUuid = '[your-acquia-environment-uuid]';
     }
 
     /**
