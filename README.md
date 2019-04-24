@@ -2,7 +2,10 @@
 
 This composer package integrates the [Robo](https://robo.li) task runner with
 the [Acquia Cloud API v2 PHP SDK](https://github.com/typhonius/acquia-php-sdk-v2/)
-to facilitate running Acquia CLI tasks either in Robo or Drush.
+to facilitate running Acquia CLI tasks either in Robo or Drush. If you aren't
+already using Robo or Drush and would like a command-line tool to interact with
+the Acquia Cloud API, it's recommended you use
+[acquia_cli](https://github.com/typhonius/acquia_cli) instead.
 
 ## Installation
 
