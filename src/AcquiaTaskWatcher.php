@@ -69,7 +69,7 @@ class AcquiaTaskWatcher
         $current_query = $this->client->getQuery();
         $this->client->clearQuery();
         $this->client->addQuery('sort', '-created');
-        $this->client->addQuery('filter', 'name=' . $taskname);
+        $this->client->addQuery('filter', 'name=' . $taskname . ';status=in-progress');
         $this->client->addQuery('limit', 1);
         try {
             do {
@@ -81,14 +81,11 @@ class AcquiaTaskWatcher
                 $result = $this->client->tasks($this->applicationUuid);
                 if (!empty($result[0]->uuid)) {
                     $task_id = $result[0]->uuid;
-                    if ($result[0]->status == 'failed') {
-                        throw new \Exception(sprintf('The %s task on Acquia failed.', $taskname));
-                    }
                 }
                 if ($callback && is_callable($callback)) {
                     call_user_func($callback, $result);
                 }
-            } while (!isset($result[0]->status) || $result[0]->status !== 'completed');
+            } while (!empty($result[0]->status));
         } catch (\Exception $e) {
             // Restore the query.
             $this->reapplyQuery($current_query);

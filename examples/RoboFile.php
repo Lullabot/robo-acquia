@@ -79,7 +79,8 @@ class RoboFile extends \Robo\Tasks
             if ($i % 3 === 0) {
                 $this->output()->write('.');
             }
-            if (isset($result[0]->status) && $result[0]->status === 'completed') {
+            // If result is empty, that means the job is complete.
+            if (empty($result[0]->status)) {
                 $this->writeln("\nTask completion detected!");
                 if (!$this->confirm('Would you like to continue?')) {
                     throw new \Robo\Exception\TaskExitException(static::class, 'Cancelled.', \Robo\Result::EXITCODE_USER_CANCEL);
