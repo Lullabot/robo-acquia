@@ -30,8 +30,8 @@ jobs:
 
       # run tests with phpunit or codecept
       - run: ./vendor/bin/phpunit --log-junit tests/logs/phpunit-results.xml
-    artifacts:
-      - tests/logs/phpunit-results.xml
+      - store_test_results:
+          path: ./tests/logs/
 
 workflows:
 
