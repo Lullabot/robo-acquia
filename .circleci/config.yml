@@ -30,6 +30,7 @@ jobs:
 
       # run tests with phpunit or codecept
       - run: ./vendor/bin/phpunit --log-junit tests/logs/phpunit-results.xml
+      - run: ./vendor/bin/grumphp run
       - store_test_results:
           path: ./tests/logs/
 

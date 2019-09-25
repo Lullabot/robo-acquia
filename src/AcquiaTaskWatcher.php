@@ -36,7 +36,7 @@ class AcquiaTaskWatcher
      *
      * @param \AcquiaCloudApi\CloudApi\ClientInterface $client
      *   The Acquia Cloud API Client.
-     * @param string $applicationUuid
+     * @param string                                   $applicationUuid
      *   The Acquia application UUID to check for tasks on.
      */
     public function __construct(ClientInterface $client, $applicationUuid)
@@ -48,9 +48,9 @@ class AcquiaTaskWatcher
     /**
      * Watch a task for completion.
      *
-     * @param string $taskname
+     * @param string   $taskname
      *   The name of the Acquia task. Use the constants in this class.
-     * @param int $timeout
+     * @param int      $timeout
      *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
      * @param callable $callback
      *   An optional callback to provide feedback during the watch loop.
@@ -64,7 +64,7 @@ class AcquiaTaskWatcher
      * @throws \Exception
      *   If any other error was encountered.
      */
-    public function watch($taskname, $timeout = 120, callable $callback = NULL)
+    public function watch($taskname, $timeout = 120, callable $callback = null)
     {
         $start = time();
         $task_id = null;

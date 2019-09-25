@@ -1,5 +1,7 @@
 <?php
 
+namespace Lullabot\RoboAcquia\Tests;
+
 use Lullabot\RoboAcquia\AcquiaTaskWatcher;
 use Lullabot\RoboAcquia\Exceptions\AcquiaTaskTimeoutExceededException;
 use AcquiaCloudApi\Tests\CloudApiTestCase;
@@ -22,5 +24,4 @@ class AcquiaTaskWatcherTest extends CloudApiTestCase
         $this->expectExceptionMessage('The timeout was exceeded waiting for the Acquia task to complete.');
         $watcher->watch('OperationStarted', 2);
     }
-
 }
