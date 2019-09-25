@@ -4,6 +4,7 @@ namespace Lullabot\RoboAcquia;
 
 use AcquiaCloudApi\CloudApi\ClientInterface;
 use Robo\ResultData;
+use Lullabot\RoboAcquia\Exceptions\AcquiaTaskTimeoutExceededException;
 
 /**
  * A class to watch for Acquia task(s) to complete.
@@ -58,8 +59,10 @@ class AcquiaTaskWatcher
      *   If successful, the message will contain the task id of the completed
      *   task.
      *
+     * @throws \Lullabot\RoboAcquia\Exceptions\AcquiaTaskTimeoutExceededException
+     *   If timeout was exceeded.
      * @throws \Exception
-     *   If timeout was exceeded or any errors were encountered.
+     *   If any other error was encountered.
      */
     public function watch($taskname, $timeout = 120, callable $callback = NULL)
     {
@@ -76,7 +79,7 @@ class AcquiaTaskWatcher
                 // Whoa there fella, don't stampede the API.
                 sleep(1);
                 if (time() - $start > $timeout) {
-                    throw new \Exception('The timeout was exceeded waiting for the Acquia task to complete.');
+                    throw new AcquiaTaskTimeoutExceededException('The timeout was exceeded waiting for the Acquia task to complete.');
                 }
                 $result = $this->client->tasks($this->applicationUuid);
                 if (!empty($result[0]->uuid)) {
