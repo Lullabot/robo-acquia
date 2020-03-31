@@ -151,11 +151,11 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
     /**
      * Wait for the Acquia tasks to complete.
      *
-     * @param string $applicationUuid
+     * @param string   $applicationUuid
      *   The Acquia application UUID to check for tasks on.
-     * @param string $name
+     * @param string   $name
      *   The name of the task to wait for completion.
-     * @param int $timeout
+     * @param int      $timeout
      *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
      * @param callable $callback
      *   An optional callback to provide feedback during the watch loop.
@@ -203,5 +203,4 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
         }
         return Result::error($this, 'Unable to detect the type of response in processResult().', $function_result);
     }
-
 }

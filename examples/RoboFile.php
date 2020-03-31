@@ -5,39 +5,44 @@
  * An example RoboFile to show how to use the Acquia task stack.
  */
 
+use AcquiaCloudApi\Response\TaskResponse;
 use Consolidation\OutputFormatters\StructuredData\UnstructuredListData;
 use Lullabot\RoboAcquia\AcquiaTaskWatcher;
+use Robo\Exception\TaskExitException;
+use Robo\Result;
+use Robo\Robo;
+use Robo\Tasks;
 
-class RoboFile extends \Robo\Tasks
+class RoboFile extends Tasks
 {
     use Lullabot\RoboAcquia\LoadRoboAcquiaTasks;
 
     private $acquiaKey;
     private $acquiaSecret;
-    private $acquiaApplicationUuid;
+    private $acquiaApplication;
 
     public function __construct()
     {
-        $this->acquiaKey = \Robo\Robo::Config()->get('acquia.key');
-        $this->acquiaSecret = \Robo\Robo::Config()->get('acquia.secret');
-        $this->acquiaApplicationUuid = '[your-acquia-application-uuid]';
+        $this->acquiaKey = Robo::Config()->get('acquia.key');
+        $this->acquiaSecret = Robo::Config()->get('acquia.secret');
+        $this->acquiaApplication = '[your-acquia-application-uuid]';
     }
 
     /**
      * List out tasks.
      *
-     * @return \Consolidation\OutputFormatters\StructuredData\UnstructuredListData
+     * @return UnstructuredListData
      *
      * @command acquia:task-list
      */
     public function acquiaTaskList()
     {
         $response = $this->taskAcquiaCloudApiStack($this->acquiaKey, $this->acquiaSecret)
-            ->tasks($this->acquiaApplicationUuid)
+            ->tasks($this->acquiaApplication)
             ->run();
         $tasks = [];
         foreach ($response['result'] as $task) {
-            /* @var \AcquiaCloudApi\Response\TaskResponse $task */
+            /* @var TaskResponse $task */
             $tasks[$task->uuid] = sprintf('%s: %s', $task->name, $task->status);
         }
         return new UnstructuredListData($tasks);
@@ -63,32 +68,31 @@ class RoboFile extends \Robo\Tasks
         // Simple waitForTaskCompletion with no callback. This will wait quietly
         // before proceeding to the next item in the stack.
         $stack->createDatabaseBackup($env_uuid, $database_name)
-            ->waitForTaskCompletion($this->acquiaApplicationUuid, AcquiaTaskWatcher::DATABASE_BACKUP_CREATED);
+            ->waitForTaskCompletion($this->acquiaApplication, AcquiaTaskWatcher::DATABASE_BACKUP_CREATED);
 
         // Deploy code and provide feedback with a callback. This will print a
         // message and provide feedback with a dot every 3 seconds. Once
         // complete, it will provide a confirmation dialog before continuing.
-        $callback = function ($result)
-        {
-            static $i = 0;
-            if ($i === 0) {
+        $callback = function ($result) {
+            static $counter = 0;
+            if ($counter === 0) {
                 $this->output()->write("\nWaiting for task completion.");
             }
-            $i++;
+            $counter++;
             // Print a dot every 3 seconds.
-            if ($i % 3 === 0) {
+            if ($counter % 3 === 0) {
                 $this->output()->write('.');
             }
             // If result is empty, that means the job is complete.
             if (empty($result[0]->status)) {
                 $this->writeln("\nTask completion detected!");
                 if (!$this->confirm('Would you like to continue?')) {
-                    throw new \Robo\Exception\TaskExitException(static::class, 'Cancelled.', \Robo\Result::EXITCODE_USER_CANCEL);
+                    throw new TaskExitException(static::class, 'Cancelled.', Result::EXITCODE_USER_CANCEL);
                 }
             }
         };
         $stack->switchCode($env_uuid, $branch)
-            ->waitForTaskCompletion($this->acquiaApplicationUuid, AcquiaTaskWatcher::CODE_SWITCHED, 240, $callback);
+            ->waitForTaskCompletion($this->acquiaApplication, AcquiaTaskWatcher::CODE_SWITCHED, 240, $callback);
 
         // Run the stack of Acquia tasks now.
         $result = $stack->run();
@@ -97,5 +101,4 @@ class RoboFile extends \Robo\Tasks
         }
         return $result;
     }
-
 }

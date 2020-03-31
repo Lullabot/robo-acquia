@@ -4,6 +4,7 @@ namespace Lullabot\RoboAcquia;
 
 use AcquiaCloudApi\CloudApi\ClientInterface;
 use Robo\ResultData;
+use Lullabot\RoboAcquia\Exceptions\AcquiaTaskTimeoutExceededException;
 
 /**
  * A class to watch for Acquia task(s) to complete.
@@ -35,7 +36,7 @@ class AcquiaTaskWatcher
      *
      * @param \AcquiaCloudApi\CloudApi\ClientInterface $client
      *   The Acquia Cloud API Client.
-     * @param string $applicationUuid
+     * @param string                                   $applicationUuid
      *   The Acquia application UUID to check for tasks on.
      */
     public function __construct(ClientInterface $client, $applicationUuid)
@@ -47,9 +48,9 @@ class AcquiaTaskWatcher
     /**
      * Watch a task for completion.
      *
-     * @param string $taskname
+     * @param string   $taskname
      *   The name of the Acquia task. Use the constants in this class.
-     * @param int $timeout
+     * @param int      $timeout
      *   The timeout in seconds to wait. Defaults to 120 (2 minutes).
      * @param callable $callback
      *   An optional callback to provide feedback during the watch loop.
@@ -58,10 +59,12 @@ class AcquiaTaskWatcher
      *   If successful, the message will contain the task id of the completed
      *   task.
      *
+     * @throws \Lullabot\RoboAcquia\Exceptions\AcquiaTaskTimeoutExceededException
+     *   If timeout was exceeded.
      * @throws \Exception
-     *   If timeout was exceeded or any errors were encountered.
+     *   If any other error was encountered.
      */
-    public function watch($taskname, $timeout = 120, callable $callback = NULL)
+    public function watch($taskname, $timeout = 120, callable $callback = null)
     {
         $start = time();
         $task_id = null;
@@ -76,7 +79,7 @@ class AcquiaTaskWatcher
                 // Whoa there fella, don't stampede the API.
                 sleep(1);
                 if (time() - $start > $timeout) {
-                    throw new \Exception('The timeout was exceeded waiting for the Acquia task to complete.');
+                    throw new AcquiaTaskTimeoutExceededException('The timeout was exceeded waiting for the Acquia task to complete.');
                 }
                 $result = $this->client->tasks($this->applicationUuid);
                 if (!empty($result[0]->uuid)) {

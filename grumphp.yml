@@ -1,0 +1,24 @@
+parameters:
+  ascii:
+    failed:
+      - resources/grumphp/mad-that-you-feel.txt
+      - resources/grumphp/mentionable.txt
+      - resources/grumphp/cry.txt
+      - resources/grumphp/be-brave.txt
+    succeeded:
+      - resources/grumphp/you-are-special.txt
+      - resources/grumphp/neighborhood.txt
+      - resources/grumphp/you-are-my-friend.txt
+      - resources/grumphp/ipoy.txt
+  tasks:
+    securitychecker: ~
+    phpcs:
+      standard:
+        - PSR2
+      warning_severity: 0
+      ignore_patterns:
+        - examples
+    composer-require-checker: ~
+    phpmd:
+      ruleset:
+        - codesize

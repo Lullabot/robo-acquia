@@ -8,9 +8,9 @@ trait LoadRoboAcquiaTasks
     /**
      * A Robo task to interact with the Acquia Cloud API.
      *
-     * @param string $key
+     * @param string   $key
      *   The Acquia Cloud API Key.
-     * @param string $secret
+     * @param string   $secret
      *   The Acquia Cloud API Secret.
      * @param iterable $config
      *   Optional. Any additional config beyond the key and secret.
@@ -24,5 +24,4 @@ trait LoadRoboAcquiaTasks
         $config['secret'] = $secret;
         return $this->task(AcquiaCloudApiStack::class, $config);
     }
-
 }
