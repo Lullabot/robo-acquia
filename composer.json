@@ -2,12 +2,8 @@
     "name": "lullabot/robo-acquia",
     "description": "A Robo task runner for the Acquia Cloud API.",
     "type": "robo-tasks",
-    "repositories":  [{
-        "type": "vcs",
-        "url": "https://github.com/Lullabot/acquia-php-sdk-v2"
-    }],
     "require": {
-        "typhonius/acquia-php-sdk-v2": "dev-patched as 1.0.4",
+        "typhonius/acquia-php-sdk-v2": "1.1.0",
         "consolidation/robo": "^1.0",
         "php": ">=7.1.0"
     },
