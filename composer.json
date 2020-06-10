@@ -3,7 +3,7 @@
     "description": "A Robo task runner for the Acquia Cloud API.",
     "type": "robo-tasks",
     "require": {
-        "typhonius/acquia-php-sdk-v2": "1.1.0",
+        "typhonius/acquia-php-sdk-v2": "^1.1.2",
         "consolidation/robo": "^1.0",
         "php": ">=7.1.0"
     },
