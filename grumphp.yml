@@ -1,4 +1,4 @@
-parameters:
+grumphp:
   ascii:
     failed:
       - resources/grumphp/mad-that-you-feel.txt
@@ -18,7 +18,11 @@ parameters:
       warning_severity: 0
       ignore_patterns:
         - examples
-    composer-require-checker: ~
+    composer_require_checker:
+      composer_file: 'composer.json'
+      config_file: ~
+      ignore_parse_errors: false
+      triggered_by: ['composer.json', 'composer.lock', '*.php']
     phpmd:
       ruleset:
         - codesize
