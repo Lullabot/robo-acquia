@@ -11,7 +11,9 @@ grumphp:
       - resources/grumphp/you-are-my-friend.txt
       - resources/grumphp/ipoy.txt
   tasks:
-    securitychecker: ~
+    securitychecker_enlightn:
+      lockfile: ./composer.lock
+      run_always: true
     phpcs:
       standard:
         - PSR2
