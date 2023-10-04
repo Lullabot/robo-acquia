@@ -14,8 +14,8 @@ use AcquiaCloudApi\Response\OperationResponse;
 use Robo\Result;
 use Robo\State\StateAwareInterface;
 use Robo\State\StateAwareTrait;
-use AcquiaCloudApi\CloudApi\Connector;
-use AcquiaCloudApi\CloudApi\Client;
+use AcquiaCloudApi\Connector\Connector;
+use AcquiaCloudApi\Connector\Client;
 use Robo\Task\StackBasedTask;
 
 /**

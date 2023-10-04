@@ -17,7 +17,7 @@ class AcquiaTaskWatcherTest extends CloudApiTestCase
      */
     public function testWatchTimeoutExceeded()
     {
-        $response = $this->getPsr7JsonResponseForFixture('Endpoints/getTasks.json');
+        $response = $this->getPsr7JsonResponseForFixture('Endpoints/Client/getFilteredTasks.json');
         $client = $this->getMockClient($response);
         $watcher = new AcquiaTaskWatcher($client, '0c7e79ab-1c4a-424e-8446-76ae8be7e851');
         $this->expectException(AcquiaTaskTimeoutExceededException::class);
