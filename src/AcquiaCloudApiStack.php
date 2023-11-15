@@ -21,37 +21,6 @@ use AcquiaCloudApi\Endpoints\Permissions;
 use AcquiaCloudApi\Endpoints\Roles;
 use AcquiaCloudApi\Endpoints\Servers;
 use AcquiaCloudApi\Endpoints\Teams;
-use AcquiaCloudApi\Response\ApplicationResponse;
-use AcquiaCloudApi\Response\ApplicationsResponse;
-use AcquiaCloudApi\Response\BackupResponse;
-use AcquiaCloudApi\Response\BackupsResponse;
-use AcquiaCloudApi\Response\BranchesResponse;
-use AcquiaCloudApi\Response\BranchResponse;
-use AcquiaCloudApi\Response\CronResponse;
-use AcquiaCloudApi\Response\CronsResponse;
-use AcquiaCloudApi\Response\DatabaseNamesResponse;
-use AcquiaCloudApi\Response\DatabasesResponse;
-use AcquiaCloudApi\Response\DomainResponse;
-use AcquiaCloudApi\Response\DomainsResponse;
-use AcquiaCloudApi\Response\EnvironmentResponse;
-use AcquiaCloudApi\Response\EnvironmentsResponse;
-use AcquiaCloudApi\Response\InsightResponse;
-use AcquiaCloudApi\Response\InsightsResponse;
-use AcquiaCloudApi\Response\InvitationResponse;
-use AcquiaCloudApi\Response\InvitationsResponse;
-use AcquiaCloudApi\Response\MemberResponse;
-use AcquiaCloudApi\Response\MembersResponse;
-use AcquiaCloudApi\Response\OperationResponse;
-use AcquiaCloudApi\Response\OrganizationResponse;
-use AcquiaCloudApi\Response\OrganizationsResponse;
-use AcquiaCloudApi\Response\PermissionResponse;
-use AcquiaCloudApi\Response\PermissionsResponse;
-use AcquiaCloudApi\Response\RoleResponse;
-use AcquiaCloudApi\Response\RolesResponse;
-use AcquiaCloudApi\Response\ServerResponse;
-use AcquiaCloudApi\Response\ServersResponse;
-use AcquiaCloudApi\Response\TeamResponse;
-use AcquiaCloudApi\Response\TeamsResponse;
 use Psr\Http\Message\StreamInterface;
 use Robo\Result;
 use Robo\State\StateAwareInterface;
@@ -77,7 +46,6 @@ use Robo\Task\StackBasedTask;
  *
  * ?>
  * ```
- *
  */
 class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
 {
@@ -293,503 +261,503 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
 
     /**
      * Show all teams.
-     *
-     * @return TeamsResponse<TeamResponse>
      */
-    public function getAll(): TeamsResponse
+    public function getAll()
     {
         $team = $this->getTeam();
-        return $team->getAll();
+        $team->getAll();
+        return $this;
     }
 
     /**
      * Create a new team.
      */
-    public function createTeam(string $organizationUuid, string $name): OperationResponse
+    public function createTeam(string $organizationUuid, string $name)
     {
         $team = $this->getTeam();
-        return $team->create($organizationUuid, $name);
+        $team->create($organizationUuid, $name);
+        return $this;
     }
 
     /**
      * Rename an existing team.
      */
-    public function renameTeam(string $teamUuid, string $name): OperationResponse
+    public function renameTeam(string $teamUuid, string $name)
     {
         $team = $this->getTeam();
-        return $team->rename($teamUuid, $name);
+        $team->rename($teamUuid, $name);
+        return $this;
     }
 
     /**
      * Delete a team.
      */
-    public function deleteTeam(string $teamUuid): OperationResponse
+    public function deleteTeam(string $teamUuid)
     {
         $team = $this->getTeam();
-        return $team->delete($teamUuid);
+        $team->delete($teamUuid);
+        return $this;
     }
 
     /**
      * Add an application to a team.
      */
-    public function addApplicationToTeam(string $teamUuid, string $applicationUuid): OperationResponse
+    public function addApplicationToTeam(string $teamUuid, string $applicationUuid)
     {
         $team = $this->getTeam();
-        return $team->addApplication($teamUuid, $applicationUuid);
+        $team->addApplication($teamUuid, $applicationUuid);
+        return $this;
     }
 
     /**
      * Show all applications associated with a team.
-     *
-     * @return ApplicationsResponse<ApplicationResponse>
      */
-    public function getApplications(string $teamUuid): ApplicationsResponse
+    public function getApplications(string $teamUuid)
     {
         $team = $this->getTeam();
-        return $team->getApplications($teamUuid);
+        $team->getApplications($teamUuid);
+        return $this;
     }
 
     /**
      * Invites a user to join a team.
-     *
-     * @param string[] $roles
      */
-    public function createTeamInvite(string $teamUuid, string $email, array $roles): OperationResponse
+    public function createTeamInvite(string $teamUuid, string $email, array $roles)
     {
         $team = $this->getTeam();
-        return $team->invite($teamUuid, $email, $roles);
+        $team->invite($teamUuid, $email, $roles);
+        return $this;
     }
 
     /**
      * Show all organizations.
-     *
-     * @return OrganizationsResponse<OrganizationResponse>
      */
-    public function organizations(): OrganizationsResponse
+    public function organizations()
     {
         $organization = $this->getOrganization();
-        return $organization->getAll();
+        $organization->getAll();
+        return $this;
     }
 
     /**
      * Show all members of an organization.
-     *
-     * @return MembersResponse<MemberResponse>
      */
-    public function members(string $organizationUuid): MembersResponse
+    public function members(string $organizationUuid)
     {
         $organization = $this->getOrganization();
-        return $organization->getMembers($organizationUuid);
+        $organization->getMembers($organizationUuid);
+        return $this;
     }
 
     /**
      * Delete a member from an organization.
      */
-    public function deleteMember(string $organizationUuid, string $memberUuid): OperationResponse
+    public function deleteMember(string $organizationUuid, string $memberUuid)
     {
         $organization = $this->getOrganization();
-        return $organization->deleteMember($organizationUuid, $memberUuid);
+        $organization->deleteMember($organizationUuid, $memberUuid);
+        return $this;
     }
 
     /**
      * Show all members invited to an organization.
-     *
-     * @return InvitationsResponse<InvitationResponse>
      */
-    public function invitees(string $organizationUuid): InvitationsResponse
+    public function invitees(string $organizationUuid)
     {
         $organization = $this->getOrganization();
-        return $organization->getMembers($organizationUuid);
+        $organization->getMembers($organizationUuid);
+        return $this;
     }
 
     /**
      * Show all teams in an organization.
-     *
-     * @return TeamsResponse<TeamResponse>
      */
-    public function organizationTeams(string $organizationUuid): TeamsResponse
+    public function organizationTeams(string $organizationUuid)
     {
         $organization = $this->getOrganization();
-        return $organization->getTeams($organizationUuid);
+        $organization->getTeams($organizationUuid);
+        return $this;
     }
 
     /**
      * Show all applications in an organization.
-     *
-     * @return ApplicationsResponse<ApplicationResponse>
      */
-    public function organizationApplications(string $organizationUuid): ApplicationsResponse
+    public function organizationApplications(string $organizationUuid)
     {
         $organization = $this->getOrganization();
-        return $organization->getApplications($organizationUuid);
+        $organization->getApplications($organizationUuid);
+        return $this;
     }
 
     /**
      * Show all roles in an organization.
-     *
-     * @return RolesResponse<RoleResponse>
      */
-    public function organizationRoles(string $organizationUuid): RolesResponse
+    public function organizationRoles(string $organizationUuid)
     {
         $role = $this->getRole();
-        return $role->getAll($organizationUuid);
+        $role->getAll($organizationUuid);
+        return $this;
     }
 
     /**
      * Invites a user to become admin of an organization.
      */
-    public function createOrganizationAdminInvite(string $organizationUuid, string $email): OperationResponse
+    public function createOrganizationAdminInvite(string $organizationUuid, string $email)
     {
         $organization = $this->getOrganization();
-        return $organization->inviteAdmin($organizationUuid, $email);
+        $organization->inviteAdmin($organizationUuid, $email);
+        return $this;
     }
 
     /**
      * Create a new role.
-     *
-     * @param array<string> $permissions
-     * @param string|null $description
      */
     public function createRole(
         string $organizationUuid,
         string $name,
         array $permissions,
         string $description = null
-    ): OperationResponse {
+    ) {
         $role = $this->getRole();
-        return $role->create($organizationUuid, $name, $permissions, $description);
+        $role->create($organizationUuid, $name, $permissions, $description);
+        return $this;
     }
 
     /**
      * Update the permissions associated with a role.
-     *
-     * @param array<string> $permissions
      */
-    public function updateRole(string $roleUuid, array $permissions): OperationResponse
+    public function updateRole(string $roleUuid, array $permissions)
     {
         $role = $this->getRole();
-        return $role->update($roleUuid, $permissions);
+        $role->update($roleUuid, $permissions);
+        return $this;
     }
 
     /**
      * Delete a role.
      */
-    public function deleteRole(string $roleUuid): OperationResponse
+    public function deleteRole(string $roleUuid)
     {
         $role = $this->getRole();
-        return $role->delete($roleUuid);
+        $role->delete($roleUuid);
+        return $this;
     }
 
     /**
      * Show all available permissions.
-     *
-     * @return PermissionsResponse<PermissionResponse>
      */
-    public function permissions(): PermissionsResponse
+    public function permissions()
     {
         $permission = $this->getPermission();
-        return $permission->get();
+        $permission->get();
+        return $this;
     }
 
     /**
      * Copies a database from an environment to an environment.
-     *
-     * @param string $environmentFromUuid
-     * @param string $dbName
-     * @param string $environmentToUuid
-     * @return OperationResponse
      */
-    public function databaseCopy(string $environmentFromUuid, string $dbName, string $environmentToUuid): OperationResponse
+    public function databaseCopy(string $environmentFromUuid, string $dbName, string $environmentToUuid)
     {
         $database = $this->getDatabase();
-        return $database->copy($environmentFromUuid, $dbName, $environmentToUuid);
+        $database->copy($environmentFromUuid, $dbName, $environmentToUuid);
+        return $this;
     }
 
     /**
      * Create a new database.
-     *
-     * @param string $applicationUuid
-     * @param string $name
-     * @return OperationResponse
      */
-    public function databaseCreate(string $applicationUuid, string $name): OperationResponse
+    public function databaseCreate(string $applicationUuid, string $name)
     {
         $database = $this->getDatabase();
-        return $database->create($applicationUuid, $name);
+        $database->create($applicationUuid, $name);
+        return $this;
     }
 
     /**
      * Delete a database
      */
-    public function databaseDelete(string $applicationUuid, string $name): OperationResponse
+    public function databaseDelete(string $applicationUuid, string $name)
     {
         $database = $this->getDatabase();
-        return $database->delete($applicationUuid, $name);
+        $database->delete($applicationUuid, $name);
+        return $this;
     }
 
     /**
      * Shows all databases in an application.
-     *
-     * @param string $applicationUuid
-     * @return DatabaseNamesResponse
      */
-    public function databases(string $applicationUuid): DatabaseNamesResponse
+    public function databases(string $applicationUuid)
     {
         $database = $this->getDatabase();
-        return $database->getNames($applicationUuid);
+        $database->getNames($applicationUuid);
+        return $this;
     }
 
     /**
      * Shows all databases in an environment.
      */
-    public function environmentDatabases(string $environmentUuid): DatabasesResponse
+    public function environmentDatabases(string $environmentUuid)
     {
         $database = $this->getDatabase();
-        return $database->getAll($environmentUuid);
+        $database->getAll($environmentUuid);
+        return $this;
     }
 
     /**
      * Shows all applications.
-     *
-     * @return ApplicationsResponse<ApplicationResponse>
      */
-    public function applications(): ApplicationsResponse
+    public function applications()
     {
         $applications = $this->getApplication();
-        return $applications->getAll();
+        $applications->getAll();
+        return $this;
     }
 
     /**
      * Shows information about an application.
      */
-    public function application(string $applicationUuid): ApplicationResponse
+    public function application(string $applicationUuid)
     {
         $applications = $this->getApplication();
-        return $applications->get($applicationUuid);
+        $applications->get($applicationUuid);
+        return $this;
     }
 
     /**
      * Renames an application.
      */
-    public function renameApplication(string $applicationUuid, string $name): OperationResponse
+    public function renameApplication(string $applicationUuid, string $name)
     {
         $applications = $this->getApplication();
-        return $applications->rename($applicationUuid, $name);
+        $applications->rename($applicationUuid, $name);
+        return $this;
     }
 
     /**
      * Shows all code branches and tags in an application.
-     *
-     * @return BranchesResponse<BranchResponse>
      */
-    public function code(string $applicationUuid): BranchesResponse
+    public function code(string $applicationUuid)
     {
         $code = $this->getCode();
-        return $code->getAll($applicationUuid);
+        $code->getAll($applicationUuid);
+        return $this;
     }
 
     /**
      * Backup a database.
      */
-    public function createDatabaseBackup(string $environmentUuid, string $dbName): OperationResponse
+    public function createDatabaseBackup(string $environmentUuid, string $dbName)
     {
         $databaseBackup = $this->getDatabaseBackup();
-        return $databaseBackup->create($environmentUuid, $dbName);
+        $databaseBackup->create($environmentUuid, $dbName);
+        return $this;
     }
 
     /**
      * Shows all database backups in an environment.
-     *
-     * @return BackupsResponse<BackupResponse>
      */
-    public function databaseBackups(string $environmentUuid, string $dbName): BackupsResponse
+    public function databaseBackups(string $environmentUuid, string $dbName)
     {
         $databaseBackup = $this->getDatabaseBackup();
-        return $databaseBackup->getAll($environmentUuid, $dbName);
+        $databaseBackup->getAll($environmentUuid, $dbName);
+        return $this;
     }
 
     /**
      * Gets information about a database backup.
      */
-    public function databaseBackup(string $environmentUuid, string $dbName, int $backupId): BackupResponse
+    public function databaseBackup(string $environmentUuid, string $dbName, int $backupId)
     {
         $databaseBackup = $this->getDatabaseBackup();
-        return $databaseBackup->get($environmentUuid, $dbName, $backupId);
+        $databaseBackup->get($environmentUuid, $dbName, $backupId);
+        return $this;
     }
 
     /**
      * Restores a database backup to a database in an environment.
      */
-    public function restoreDatabaseBackup(string $environmentUuid, string $dbName, int $backupId): OperationResponse
+    public function restoreDatabaseBackup(string $environmentUuid, string $dbName, int $backupId)
     {
         $databaseBackup = $this->getDatabaseBackup();
-        return $databaseBackup->get($environmentUuid, $dbName, $backupId);
+        $databaseBackup->get($environmentUuid, $dbName, $backupId);
+        return $this;
     }
 
     /**
      * Copies files from an environment to another environment.
      */
-    public function copyFiles(string $environmentUuidFrom, string $environmentUuidTo): OperationResponse
+    public function copyFiles(string $environmentUuidFrom, string $environmentUuidTo)
     {
         $environment = $this->getEnvironment();
-        return $environment->copyFiles($environmentUuidFrom, $environmentUuidTo);
+        $environment->copyFiles($environmentUuidFrom, $environmentUuidTo);
+        return $this;
     }
 
     /**
      * Deploys a code branch/tag to an environment.
      */
-    public function switchCode(string $environmentUuid, string $branch): OperationResponse
+    public function switchCode(string $environmentUuid, string $branch)
     {
         $code = $this->getCode();
-        return $code->switch($environmentUuid, $branch);
+        $code->switch($environmentUuid, $branch);
+        return $this;
     }
 
     /**
      * Deploys code from one environment to another environment.
-     *
-     * @param string|null $commitMessage
      */
     public function deployCode(
         string $environmentFromUuid,
         string $environmentToUuid,
         string $commitMessage = null
-    ): OperationResponse {
+    ) {
         $code = $this->getCode();
-        return $code->deploy($environmentFromUuid, $environmentToUuid, $commitMessage);
+        $code->deploy($environmentFromUuid, $environmentToUuid, $commitMessage);
+        return $this;
     }
 
     /**
      * Shows all domains on an environment.
-     *
-     * @return DomainsResponse<DomainResponse>
      */
-    public function domains(string $environmentUuid): DomainsResponse
+    public function domains(string $environmentUuid)
     {
         $domain = $this->getDomain();
-        return $domain->getAll($environmentUuid);
+        $domain->getAll($environmentUuid);
+        return $this;
     }
 
     /**
      * Adds a domain to an environment.
      */
-    public function createDomain(string $environmentUuid, string $hostname): OperationResponse
+    public function createDomain(string $environmentUuid, string $hostname)
     {
         $domain = $this->getDomain();
-        return $domain->create($environmentUuid, $hostname);
+        $domain->create($environmentUuid, $hostname);
+        return $this;
     }
 
     /**
      * Deletes a domain from an environment.
      */
-    public function deleteDomain(string $environmentUuid, string $envDomain): OperationResponse
+    public function deleteDomain(string $environmentUuid, string $envDomain)
     {
         $domain = $this->getDomain();
-        return $domain->delete($environmentUuid, $envDomain);
+        $domain->delete($environmentUuid, $envDomain);
+        return $this;
     }
+
+  /**
+   * Purges cache for selected domains in an environment.
+   */
+  public function purgeVarnishCache(string $environmentUuid, array $domains)
+  {
+        $domain = $this->getDomain();
+        $domain->purge($environmentUuid, $domains);
+        return $this;
+  }
 
     /**
      * Shows all environments in an application.
-     *
-     * @return EnvironmentsResponse<EnvironmentResponse>
      */
-    public function environments(string $applicationUuid): EnvironmentsResponse
+    public function environments(string $applicationUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->getAll($applicationUuid);
+        $environment->getAll($applicationUuid);
+        return $this;
     }
 
     /**
      * Gets information about an environment.
      */
-    public function environment(string $environmentUuid): EnvironmentResponse
+    public function environment(string $environmentUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->get($environmentUuid);
+        $environment->get($environmentUuid);
+        return $this;
     }
 
     /**
      * Renames an environment.
      */
-    public function renameEnvironment(string $environmentUuid, string $label): OperationResponse
+    public function renameEnvironment(string $environmentUuid, string $label)
     {
         $environment = $this->getEnvironment();
-        return $environment->rename($environmentUuid, $label);
+        $environment->rename($environmentUuid, $label);
+        return $this;
     }
 
     /**
      * Show all servers associated with an environment.
-     *
-     * @return ServersResponse<ServerResponse>
      */
-    public function servers(string $environmentUuid): ServersResponse
+    public function servers(string $environmentUuid)
     {
         $server = $this->getServer();
-        return $server->getAll($environmentUuid);
+        $server->getAll($environmentUuid);
+        return $this;
     }
 
     /**
      * Enable livedev mode for an environment.
      */
-    public function enableLiveDev(string $environmentUuid): OperationResponse
+    public function enableLiveDev(string $environmentUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->enableLiveDev($environmentUuid);
+        $environment->enableLiveDev($environmentUuid);
+        return $this;
     }
 
     /**
      * Disable livedev mode for an environment.
      */
-    public function disableLiveDev(string $environmentUuid): OperationResponse
+    public function disableLiveDev(string $environmentUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->disableLiveDev($environmentUuid);
+        $environment->disableLiveDev($environmentUuid);
+        return $this;
     }
 
     /**
      * Enable production mode for an environment.
      */
-    public function enableProductionMode(string $environmentUuid): OperationResponse
+    public function enableProductionMode(string $environmentUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->enableProductionMode($environmentUuid);
+        $environment->enableProductionMode($environmentUuid);
+        return $this;
     }
 
     /**
      * Disable production mode for an environment.
      */
-    public function disableProductionMode(string $environmentUuid): OperationResponse
+    public function disableProductionMode(string $environmentUuid)
     {
         $environment = $this->getEnvironment();
-        return $environment->disableProductionMode($environmentUuid);
+        $environment->disableProductionMode($environmentUuid);
+        return $this;
     }
 
     /**
      * Show all cron tasks for an environment.
-     *
-     * @param string $environmentUuid The environment ID
-     * @return CronsResponse<CronResponse>
      */
-    public function crons(string $environmentUuid): CronsResponse
+    public function crons(string $environmentUuid)
     {
         $cron = $this->getCron();
-        return $cron->getAll($environmentUuid);
+        $cron->getAll($environmentUuid);
+        return $this;
     }
 
     /**
      * Get information about a cron task.
-     *
-     * @param string $environmentUuid The environment ID
      */
-    public function cron(string $environmentUuid, int $cronId): CronResponse
+    public function cron(string $environmentUuid, int $cronId)
     {
         $cron = $this->getCron();
-        return $cron->get($environmentUuid, $cronId);
+        $cron->get($environmentUuid, $cronId);
+        return $this;
     }
 
     /**
      * Add a cron task.
-     *
-     * @param string|null $serverId
      */
     public function createCron(
         string $environmentUuid,
@@ -797,68 +765,71 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
         string $frequency,
         string $label,
         string $serverId = null
-    ): OperationResponse {
+    ) {
         $cron = $this->getCron();
-        return $cron->create($environmentUuid, $command, $frequency, $label, $serverId);
+        $cron->create($environmentUuid, $command, $frequency, $label, $serverId);
+        return $this;
     }
 
     /**
      * Delete a cron task.
      */
-    public function deleteCron(string $environmentUuid, int $cronId): OperationResponse
+    public function deleteCron(string $environmentUuid, int $cronId)
     {
         $cron = $this->getCron();
-        return $cron->delete($environmentUuid, $cronId);
+        $cron->delete($environmentUuid, $cronId);
+        return $this;
     }
 
     /**
      * Disable a cron task.
      */
-    public function disableCron(string $environmentUuid, int $cronId): OperationResponse
+    public function disableCron(string $environmentUuid, int $cronId)
     {
         $cron = $this->getCron();
-        return $cron->disable($environmentUuid, $cronId);
+        $cron->disable($environmentUuid, $cronId);
+        return $this;
     }
 
     /**
      * Enable a cron task.
      */
-    public function enableCron(string $environmentUuid, int $cronId): OperationResponse
+    public function enableCron(string $environmentUuid, int $cronId)
     {
         $cron = $this->getCron();
-        return $cron->enable($environmentUuid, $cronId);
+        $cron->enable($environmentUuid, $cronId);
+        return $this;
     }
 
     /**
      * Provides an archived set of files for Acquia Drush aliases.
      */
-    public function drushAliases(): StreamInterface
+    public function drushAliases()
     {
         $account = $this->getAccount();
-        return $account->getDrushAliases();
+        $account->getDrushAliases();
+        return $this;
     }
 
     /**
      * Returns Insight data for all sites associated with the application by its
      * UUID.
-     *
-     * @return InsightsResponse<InsightResponse>
      */
-    public function applicationInsights(string $applicationUuid): InsightsResponse
+    public function applicationInsights(string $applicationUuid)
     {
         $insight = $this->getInsight();
-        return $insight->getAll($applicationUuid);
+        $insight->getAll($applicationUuid);
+        return $this;
     }
 
     /**
      * Returns Insight data for all sites associated with the environment by its
      * UUID.
-     *
-     * @return InsightsResponse<InsightResponse>
      */
-    public function environmentInsights(string $environmentUuid): InsightsResponse
+    public function environmentInsights(string $environmentUuid)
     {
         $insight = $this->getInsight();
-        return $insight->getEnvironment($environmentUuid);
+        $insight->getEnvironment($environmentUuid);
+        return $this;
     }
 }
