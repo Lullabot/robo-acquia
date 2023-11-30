@@ -365,8 +365,8 @@ class AcquiaClient extends Client
      */
     public function purgeVarnishCache($environmentUuid, array $domains): OperationResponse
     {
-        $domains = new Domains(self::factory($this->connector));
-        return $domains->purge($environmentUuid, $domains);
+        $domain = new Domains(self::factory($this->connector));
+        return $domain->purge($environmentUuid, $domains);
     }
 
     /**
