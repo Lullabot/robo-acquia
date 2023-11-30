@@ -23,23 +23,12 @@ class AcquiaTaskWatcher
      * @var string
      */
     protected $applicationUuid;
-
-    /**
-     * The Acquia Cloud API Client.
-     *
-     * @var \AcquiaCloudApi\Connector\Client
-     */
     protected $client;
 
     /**
      * Constructor.
-     *
-     * @param \AcquiaCloudApi\Connector\Client $client
-     *   The Acquia Cloud API Client.
-     * @param string                                   $applicationUuid
-     *   The Acquia application UUID to check for tasks on.
      */
-    public function __construct(Client $client, $applicationUuid)
+    public function __construct(Client|AcquiaClient $client, $applicationUuid)
     {
         $this->client = $client;
         $this->applicationUuid = $applicationUuid;

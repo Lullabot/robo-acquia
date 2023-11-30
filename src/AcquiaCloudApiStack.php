@@ -16,6 +16,7 @@ use Robo\State\StateAwareInterface;
 use Robo\State\StateAwareTrait;
 use AcquiaCloudApi\Connector\Connector;
 use AcquiaCloudApi\Connector\Client;
+use Lullabot\RoboAcquia\AcquiaClient;
 use Robo\Task\StackBasedTask;
 
 /**
@@ -110,7 +111,7 @@ class AcquiaCloudApiStack extends StackBasedTask implements StateAwareInterface
     public function __construct(iterable $config = [])
     {
         $this->connector = new Connector($config);
-        $this->delegate = new Client($this->connector);
+        $this->delegate = new AcquiaClient($this->connector);
     }
 
     protected function getDelegate()
